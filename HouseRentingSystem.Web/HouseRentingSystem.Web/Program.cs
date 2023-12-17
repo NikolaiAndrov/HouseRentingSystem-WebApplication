@@ -2,7 +2,9 @@ namespace HouseRentingSystem.Web
 {
     using HouseRentingSystem.Data;
     using HouseRentingSystem.Data.Models;
-    using Microsoft.EntityFrameworkCore;
+	using HouseRentingSystem.Services;
+	using HouseRentingSystem.Services.Interfaces;
+	using Microsoft.EntityFrameworkCore;
 
     public class Program
     {
@@ -38,6 +40,8 @@ namespace HouseRentingSystem.Web
             .AddEntityFrameworkStores<HouseRentingDbContext>();
 
             builder.Services.AddControllersWithViews();
+
+            builder.Services.AddScoped<IHouseService, HouseService>();
 
             WebApplication app = builder.Build();
 

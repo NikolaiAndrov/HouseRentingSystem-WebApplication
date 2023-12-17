@@ -3,6 +3,7 @@
 	using HouseRentingSystem.Data;
 	using HouseRentingSystem.Services.Interfaces;
 	using HouseRentingSystem.Web.ViewModels.Home;
+	using Microsoft.EntityFrameworkCore;
 	using System.Collections.Generic;
 	using System.Threading.Tasks;
 
@@ -17,7 +18,16 @@
 
         public async Task<ICollection<IndexViewModel>> LastThreeHousesAsync()
 		{
-			ICollection<IndexViewModel> indexHouses = new HashSet<IndexViewModel>();
+			ICollection<IndexViewModel> indexHouses = await dbContext.Houses
+				.OrderByDescending(h => h.CreatedOn)
+				.Take(3)
+				.Select(h => new IndexViewModel
+				{
+					Id = h.Id.ToString(),
+					Title = h.Title,
+					ImageUrl = h.ImageUrl
+				})
+				.ToArrayAsync();
 
 			return indexHouses;
 		}
