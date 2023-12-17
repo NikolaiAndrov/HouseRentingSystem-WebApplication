@@ -45,7 +45,6 @@
         [ForeignKey(nameof(AgentId))]
         public virtual Agent Agent { get; set; } = null!;
 
-        [Required]
         public Guid? RenterId { get; set; }
 
         public virtual ApplicationUser? Renter { get; set; }
