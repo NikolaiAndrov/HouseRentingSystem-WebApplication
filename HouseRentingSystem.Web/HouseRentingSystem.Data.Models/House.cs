@@ -34,6 +34,9 @@
         public decimal PricePerMonth { get; set; }
 
         [Required]
+        public DateTime CreatedOn { get; set; }
+
+        [Required]
         public int CategoryId { get; set; }
 
         [ForeignKey(nameof(CategoryId))]
