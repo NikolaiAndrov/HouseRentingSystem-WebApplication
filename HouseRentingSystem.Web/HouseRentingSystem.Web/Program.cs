@@ -42,6 +42,7 @@ namespace HouseRentingSystem.Web
             builder.Services.AddControllersWithViews();
 
             builder.Services.AddScoped<IHouseService, HouseService>();
+            builder.Services.AddScoped<IAgentService, AgentService>();
 
             WebApplication app = builder.Build();
 
