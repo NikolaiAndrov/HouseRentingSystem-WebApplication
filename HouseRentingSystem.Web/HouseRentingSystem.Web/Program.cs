@@ -4,6 +4,7 @@ namespace HouseRentingSystem.Web
     using HouseRentingSystem.Data.Models;
 	using HouseRentingSystem.Services;
 	using HouseRentingSystem.Services.Interfaces;
+	using HouseRentingSystem.Web.Infrastructure.ModelBinders;
 	using Microsoft.EntityFrameworkCore;
 
     public class Program
@@ -39,7 +40,11 @@ namespace HouseRentingSystem.Web
             })
             .AddEntityFrameworkStores<HouseRentingDbContext>();
 
-            builder.Services.AddControllersWithViews();
+            builder.Services.AddControllersWithViews()
+                .AddMvcOptions(options =>
+                {
+                    options.ModelBinderProviders.Insert(0, new DecimalModelBinderProvider());
+                });
 
             builder.Services.AddScoped<IHouseService, HouseService>();
             builder.Services.AddScoped<IAgentService, AgentService>();
