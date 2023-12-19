@@ -1,5 +1,6 @@
 ﻿namespace HouseRentingSystem.Web.Controllers
 {
+	using HouseRentingSystem.Web.ViewModels.House;
 	using Microsoft.AspNetCore.Authorization;
 	using Microsoft.AspNetCore.Mvc;
 
@@ -15,7 +16,8 @@
 		[HttpGet]
 		public async Task<IActionResult> Add()
 		{
-
+			HouseFormModel model = new HouseFormModel();
+			return View(model);
 		}
 	}
 }

@@ -25,9 +25,11 @@
 
 		[Required(AllowEmptyStrings = false)]
 		[MaxLength(ImageUrlMaxlLength)]
+		[Display(Name = "Image Link")]
 		public string ImageUrl { get; set; } = null!;
 
 		[Range(typeof(decimal), PricePerMonthMinValue, PricePerMonthMaxValue)]
+		[Display(Name = "Price Per Month")]
 		public decimal PricePerMonth { get; set; }
 
 		[Required]
