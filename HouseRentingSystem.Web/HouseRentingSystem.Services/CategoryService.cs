@@ -25,5 +25,8 @@
 
 			return categories;
 		}
+
+		public async Task<bool> IsCategoryExistingByIdAsync(int id)
+			=> await this.dbContext.Categories.AnyAsync(c => c.Id == id);
 	}
 }

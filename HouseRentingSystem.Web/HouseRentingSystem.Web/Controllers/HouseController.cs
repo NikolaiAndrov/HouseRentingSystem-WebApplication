@@ -37,9 +37,9 @@
 			try
 			{
 				string userId = this.User.FindFirstValue(ClaimTypes.NameIdentifier);
-				isAgent = await agentService.IsAgentExistingAsync(userId);
+				isAgent = await this.agentService.IsAgentExistingAsync(userId);
 
-				model.Categories = await categoryService.GetAllCategoriesAsync();
+				model.Categories = await this.categoryService.GetAllCategoriesAsync();
 			}
 			catch (Exception)
 			{
@@ -54,6 +54,56 @@
 			}
 
 			return View(model);
+		}
+
+		[HttpPost]
+		public async Task<IActionResult> Add(HouseFormModel model)
+		{
+			bool isCategoryExisting = false;
+			bool isAgent = false;
+
+			try
+			{
+				string userId = this.User.FindFirstValue(ClaimTypes.NameIdentifier);
+
+				isCategoryExisting = await this.categoryService.IsCategoryExistingByIdAsync(model.CategoryId);
+				isAgent = await this.agentService.IsAgentExistingAsync(userId);
+			}
+			catch (Exception)
+			{
+				TempData[ErrorMessage] = "Unexpected error occured, please try later or contact administrator!";
+				return RedirectToAction("Index", "Home");
+			}
+
+			if (!isAgent)
+			{
+				TempData[ErrorMessage] = "To add a house you must be an Agent!";
+				return RedirectToAction("Become", "Agent");
+			}
+
+			if (!isCategoryExisting)
+			{
+				ModelState.AddModelError(nameof(model.CategoryId), "You should select an existing category!");
+			}
+
+			if (!ModelState.IsValid)
+			{
+				try
+				{
+					model.Categories = await this.categoryService.GetAllCategoriesAsync();
+				}
+				catch (Exception)
+				{
+					TempData[ErrorMessage] = "Unexpected error occured, please try later or contact administrator!";
+					return RedirectToAction("Index", "Home");
+				}
+
+				return View(model);
+			}
+
+			//CREATE SERVICE TO ADD THE HOUSE !!!!!!
+
+			return RedirectToAction("All", "House");
 		}
 	}
 }
