@@ -61,10 +61,11 @@
 		{
 			bool isCategoryExisting = false;
 			bool isAgent = false;
+			string userId;
 
 			try
 			{
-				string userId = this.User.FindFirstValue(ClaimTypes.NameIdentifier);
+				userId = this.User.FindFirstValue(ClaimTypes.NameIdentifier);
 
 				isCategoryExisting = await this.categoryService.IsCategoryExistingByIdAsync(model.CategoryId);
 				isAgent = await this.agentService.IsAgentExistingAsync(userId);
@@ -101,7 +102,15 @@
 				return View(model);
 			}
 
-			//CREATE SERVICE TO ADD THE HOUSE !!!!!!
+			try
+			{
+				await this.houseService.AddHouseAsync(model, userId);
+			}
+			catch (Exception)
+			{
+				TempData[ErrorMessage] = "Unexpected error occured while trying to add the house, please try later or contact administrator!";
+				return RedirectToAction("Index", "Home");
+			}
 
 			return RedirectToAction("All", "House");
 		}

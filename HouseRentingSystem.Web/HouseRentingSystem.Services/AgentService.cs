@@ -35,5 +35,15 @@
             await dbContext.Agents.AddAsync(agent);
             await dbContext.SaveChangesAsync();
         }
-    }
+
+		public async Task<Guid> GetAgentIdAsync(string userId)
+		{
+			Guid agentId = await this.dbContext.Agents
+                .Where(a => a.UserId.ToString() == userId)
+                .Select(a => a.Id)
+                .FirstAsync();
+
+            return agentId;
+		}
+	}
 }
