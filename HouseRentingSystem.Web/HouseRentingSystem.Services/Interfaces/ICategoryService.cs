@@ -7,5 +7,7 @@
 		Task<ICollection<CategoryFormModel>> GetAllCategoriesAsync();
 
 		Task<bool> IsCategoryExistingByIdAsync(int id);
+
+		Task<ICollection<string>> AllCategoriesNameAsync();
 	}
 }

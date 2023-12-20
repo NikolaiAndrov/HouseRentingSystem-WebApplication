@@ -1,5 +1,6 @@
 ﻿namespace HouseRentingSystem.Web.Controllers
 {
+	using HouseRentingSystem.Services.Data.Models;
 	using HouseRentingSystem.Services.Interfaces;
 	using HouseRentingSystem.Web.ViewModels.House;
 	using Microsoft.AspNetCore.Authorization;
@@ -23,9 +24,25 @@
 
 
 		[AllowAnonymous]
-		public async Task<IActionResult> All()
+		[HttpGet]
+		public async Task<IActionResult> All([FromQuery]AllHousesQueryModel queryModel)
 		{
-			return View();
+			AllHousesFilteredAndPagedServiceModel serviceModel;
+
+			try
+			{
+				serviceModel = await this.houseService.AllAsync(queryModel);
+				queryModel.Houses = serviceModel.Houses;
+				queryModel.TotalHouses = serviceModel.AllHousesCount;
+				queryModel.Categories = await this.categoryService.AllCategoriesNameAsync();
+			}
+			catch (Exception)
+			{
+				TempData[ErrorMessage] = "Unexpected error occured, please try later or contact administrator!";
+				return RedirectToAction("Index", "Home");
+			}
+
+			return View(queryModel);
 		}
 
 		[HttpGet]

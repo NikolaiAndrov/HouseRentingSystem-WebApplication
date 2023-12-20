@@ -13,7 +13,16 @@
             this.dbContext = dbContext;
         }
 
-        public async Task<ICollection<CategoryFormModel>> GetAllCategoriesAsync()
+		public async Task<ICollection<string>> AllCategoriesNameAsync()
+		{
+			ICollection<string> categories = await this.dbContext.Categories
+				.Select(c => c.Name)
+				.ToArrayAsync();
+
+			return categories;
+		}
+
+		public async Task<ICollection<CategoryFormModel>> GetAllCategoriesAsync()
 		{
 			ICollection<CategoryFormModel> categories = await this.dbContext.Categories
 				.Select(c => new CategoryFormModel
