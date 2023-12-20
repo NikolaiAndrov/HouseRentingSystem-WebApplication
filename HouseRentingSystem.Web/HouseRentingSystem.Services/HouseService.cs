@@ -76,6 +76,7 @@
 			};
 
 			ICollection<HouseAllViewModel> allHouses = await housesQuery
+				.Where(h => h.IsActive)
 				.Skip((allHousesQueryModel.CurrentPage - 1) * allHousesQueryModel.HousesPerPage)
 				.Take(allHousesQueryModel.HousesPerPage)
 				.Select(h => new HouseAllViewModel
@@ -103,6 +104,7 @@
 		public async Task<ICollection<IndexViewModel>> LastThreeHousesAsync()
 		{
 			ICollection<IndexViewModel> indexHouses = await dbContext.Houses
+				.Where(h => h.IsActive)
 				.OrderByDescending(h => h.CreatedOn)
 				.Take(3)
 				.Select(h => new IndexViewModel
