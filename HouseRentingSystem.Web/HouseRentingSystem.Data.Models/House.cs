@@ -37,6 +37,9 @@
         public DateTime CreatedOn { get; set; }
 
         [Required]
+        public bool IsActive { get; set; }
+
+        [Required]
         public int CategoryId { get; set; }
 
         [ForeignKey(nameof(CategoryId))]
