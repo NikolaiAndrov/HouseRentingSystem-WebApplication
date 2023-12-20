@@ -33,6 +33,7 @@
 				Description = houseModel.Description,
 				ImageUrl = houseModel.ImageUrl,
 				PricePerMonth = houseModel.PricePerMonth,
+				CreatedOn = DateTime.UtcNow,
 				CategoryId = houseModel.CategoryId,
 				AgentId = agentId
 			};
