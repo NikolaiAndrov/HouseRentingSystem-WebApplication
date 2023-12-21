@@ -188,6 +188,9 @@
 			return houseFormModel;
 		}
 
+		public async Task<bool> IsHouseExistingByIdAsync(string houseId)
+			=> await this.dbContext.Houses.AnyAsync(h => h.IsActive && h.Id.ToString() == houseId);
+
 		public async Task<ICollection<IndexViewModel>> LastThreeHousesAsync()
 		{
 			ICollection<IndexViewModel> indexHouses = await dbContext.Houses

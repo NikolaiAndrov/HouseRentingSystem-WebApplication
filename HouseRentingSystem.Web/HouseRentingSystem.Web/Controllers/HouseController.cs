@@ -171,14 +171,40 @@
 		}
 
 		[HttpGet]
-		public async Task<IActionResult> Edit(string id)
+		public async Task<IActionResult> Edit(string Id)
 		{
 			HouseFormModel house;
+			bool isAgentExisting = false;
+			bool isHouseExisting = false;
+
+			try
+			{
+				string userId =	this.User.FindFirstValue(ClaimTypes.NameIdentifier);
+				isAgentExisting = await this.agentService.IsAgentExistingAsync(userId);
+				isHouseExisting = await this.houseService.IsHouseExistingByIdAsync(Id);
+			}
+			catch (Exception)
+			{
+				TempData[ErrorMessage] = "Unexpected error occured while retreiving your list of houses, please try later or contact administrator!";
+				return RedirectToAction("Index", "Home");
+			}
+
+			if (!isAgentExisting)
+			{
+				TempData[ErrorMessage] = "To edit a house you must be an agent and house must be yours!";
+				return RedirectToAction("Become", "Agent");
+			}
+
+			if (!isHouseExisting)
+			{
+				TempData[ErrorMessage] = "It seems the house You looking for is no longer available!";
+				return RedirectToAction("Index", "Home");
+			}
 
 			try
 			{
 				string userId = this.User.FindFirstValue(ClaimTypes.NameIdentifier);
-				house = await this.houseService.GetHouseForEditAsync(id, userId);
+				house = await this.houseService.GetHouseForEditAsync(Id, userId);
 				house.Categories = await this.categoryService.GetAllCategoriesAsync();
 			}
 			catch (Exception)
@@ -189,5 +215,11 @@
 
 			return View(house);
 		}
+
+		//[HttpPost]
+		//public async Task<IActionResult> Edit(string Id, HouseFormModel model)
+		//{
+
+		//}
 	}
 }

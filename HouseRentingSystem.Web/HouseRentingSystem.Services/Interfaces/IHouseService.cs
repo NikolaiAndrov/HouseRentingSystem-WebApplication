@@ -17,5 +17,7 @@
 		Task<HouseDetailViewModel> GetHouseDetailAsync(string houseId);
 
 		Task<HouseFormModel> GetHouseForEditAsync(string houseId, string userId);
+
+		Task<bool> IsHouseExistingByIdAsync(string houseId);
 	}
 }
