@@ -179,6 +179,7 @@
 			{
 				string userId = this.User.FindFirstValue(ClaimTypes.NameIdentifier);
 				house = await this.houseService.GetHouseForEditAsync(id, userId);
+				house.Categories = await this.categoryService.GetAllCategoriesAsync();
 			}
 			catch (Exception)
 			{

@@ -16,13 +16,11 @@
 	{
 		private readonly HouseRentingDbContext dbContext;
 		private readonly IAgentService agentService;
-		private readonly CategoryService categoryService;
 
-        public HouseService(HouseRentingDbContext dbContext, IAgentService agentService, CategoryService categoryService)
+        public HouseService(HouseRentingDbContext dbContext, IAgentService agentService)
         {
             this.dbContext = dbContext;
 			this.agentService = agentService;
-			this.categoryService = categoryService;
         }
 
 		public async Task AddHouseAsync(HouseFormModel houseModel, string userId)
@@ -186,8 +184,6 @@
 					CategoryId = h.CategoryId
 				})
 				.FirstAsync();
-
-			houseFormModel.Categories = await this.categoryService.GetAllCategoriesAsync();
 			
 			return houseFormModel;
 		}
