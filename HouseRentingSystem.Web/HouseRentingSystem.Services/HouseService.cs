@@ -112,7 +112,7 @@
                 Guid agentId = await this.agentService.GetAgentIdAsync(userId);
 
 				myHouses = await this.dbContext.Houses
-					.Where(h => h.AgentId == agentId)
+					.Where(h => h.IsActive && h.AgentId == agentId)
 					.Select(h => new HouseAllViewModel
 					{
 						Id = h.Id.ToString(),
@@ -127,7 +127,7 @@
 			else
 			{
 				myHouses = await this.dbContext.Houses
-					.Where(h => h.RenterId.HasValue && h.RenterId.ToString() == userId)
+					.Where(h => h.IsActive && h.RenterId.HasValue && h.RenterId.ToString() == userId)
 					.Select(h => new HouseAllViewModel
 					{
 						Id = h.Id.ToString(),
