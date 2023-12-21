@@ -102,6 +102,23 @@
 			return model;
 		}
 
+		public async Task EditHouseAsync(HouseFormModel house, string userId, string houseId)
+		{
+			Guid agentId = await this.agentService.GetAgentIdAsync(userId);
+
+			House houseToEdit = await this.dbContext.Houses
+				.FirstAsync(h => h.IsActive && h.Id.ToString() == houseId && h.AgentId == agentId);
+
+			houseToEdit.Title = house.Title;
+			houseToEdit.Address = house.Address;
+			houseToEdit.Description = house.Description;
+			houseToEdit.ImageUrl = house.ImageUrl;
+			houseToEdit.PricePerMonth = house.PricePerMonth;
+			houseToEdit.CategoryId = house.CategoryId;
+
+			await this.dbContext.SaveChangesAsync();
+		}
+
 		public async Task<ICollection<HouseAllViewModel>> GetAllHousesByUserOrAgentIdAsync(string userId)
 		{
 			ICollection<HouseAllViewModel> myHouses;

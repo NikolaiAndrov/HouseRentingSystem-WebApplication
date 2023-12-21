@@ -129,6 +129,7 @@
 				return RedirectToAction("Index", "Home");
 			}
 
+			TempData[SuccessMessage] = "You have added a new house successfuly";
 			return RedirectToAction("All", "House");
 		}
 
@@ -185,7 +186,7 @@
 			}
 			catch (Exception)
 			{
-				TempData[ErrorMessage] = "Unexpected error occured while retreiving your list of houses, please try later or contact administrator!";
+				TempData[ErrorMessage] = "Unexpected error occured while trying to execute your request, please try later or contact administrator!";
 				return RedirectToAction("Index", "Home");
 			}
 
@@ -210,16 +211,68 @@
 			catch (Exception)
 			{
 				TempData[ErrorMessage] = "You do not have the permission to edit this house. To edit a house you must be the owner (Agent) of the house!";
-				return RedirectToAction("Index", "Home");
+				return RedirectToAction("All", "House");
 			}
 
 			return View(house);
 		}
 
-		//[HttpPost]
-		//public async Task<IActionResult> Edit(string Id, HouseFormModel model)
-		//{
+		[HttpPost]
+		public async Task<IActionResult> Edit(string Id, HouseFormModel model)
+		{
+			bool isAgentExisting = false;
+			bool isHouseExisting = false;
+			bool isCategoryExisting = false;
 
-		//}
+			try
+			{
+				string userId = this.User.FindFirstValue(ClaimTypes.NameIdentifier);
+				isAgentExisting = await this.agentService.IsAgentExistingAsync(userId);
+				isHouseExisting = await this.houseService.IsHouseExistingByIdAsync(Id);
+				isCategoryExisting = await this.categoryService.IsCategoryExistingByIdAsync(model.CategoryId);
+			}
+			catch (Exception)
+			{
+				TempData[ErrorMessage] = "Unexpected error occured while trying to execute your request, please try later or contact administrator!";
+				return RedirectToAction("Index", "Home");
+			}
+
+			if (!isAgentExisting)
+			{
+				TempData[ErrorMessage] = "To edit a house you must be an agent and house must be yours!";
+				return RedirectToAction("Become", "Agent");
+			}
+
+			if (!isHouseExisting)
+			{
+				TempData[ErrorMessage] = "It seems the house You looking for is no longer available!";
+				return RedirectToAction("Index", "Home");
+			}
+
+			if (!isCategoryExisting)
+			{
+				this.ModelState.AddModelError(nameof(model.CategoryId), "The selected category does not exist!");
+			}
+
+			if (!this.ModelState.IsValid)
+			{
+				model.Categories = await this.categoryService.GetAllCategoriesAsync();
+				return View(model);
+			}
+
+			try
+			{
+				string userId = this.User.FindFirstValue(ClaimTypes.NameIdentifier);
+				await this.houseService.EditHouseAsync(model, userId, Id);
+			}
+			catch (Exception)
+			{
+				TempData[ErrorMessage] = "You do not have the permission to edit this house. To edit a house you must be the owner (Agent) of the house!";
+				return RedirectToAction("All", "House");
+			}
+
+			TempData[SuccessMessage] = "You have edited the house successfuly!";
+			return RedirectToAction("Details", "House", new {Id});
+		}
 	}
 }

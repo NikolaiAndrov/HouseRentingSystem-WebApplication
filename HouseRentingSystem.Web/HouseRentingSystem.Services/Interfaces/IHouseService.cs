@@ -18,6 +18,8 @@
 
 		Task<HouseFormModel> GetHouseForEditAsync(string houseId, string userId);
 
+		Task EditHouseAsync(HouseFormModel house, string userId, string houseId);
+
 		Task<bool> IsHouseExistingByIdAsync(string houseId);
 	}
 }
