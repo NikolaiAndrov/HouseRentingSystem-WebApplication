@@ -8,6 +8,7 @@
 	using HouseRentingSystem.Web.ViewModels.House;
 	using HouseRentingSystem.Web.Views.House.Enums;
 	using Microsoft.EntityFrameworkCore;
+	using Microsoft.Extensions.Logging;
 	using System.Collections.Generic;
 	using System.Threading.Tasks;
 
@@ -100,6 +101,47 @@
 
 			return model;
 		}
+
+		public async Task<ICollection<HouseAllViewModel>> GetAllHousesByUserOrAgentIdAsync(string userId)
+		{
+			ICollection<HouseAllViewModel> myHouses;
+			bool isAgent = await this.agentService.IsAgentExistingAsync(userId);
+
+            if (isAgent)
+            {
+                Guid agentId = await this.agentService.GetAgentIdAsync(userId);
+
+				myHouses = await this.dbContext.Houses
+					.Where(h => h.AgentId == agentId)
+					.Select(h => new HouseAllViewModel
+					{
+						Id = h.Id.ToString(),
+						Title = h.Title,
+						Address = h.Address,
+						ImageUrl = h.ImageUrl,
+						PricePerMonth = h.PricePerMonth,
+						IsRented = h.RenterId.HasValue
+					})
+					.ToArrayAsync();
+            }
+			else
+			{
+				myHouses = await this.dbContext.Houses
+					.Where(h => h.RenterId.HasValue && h.RenterId.ToString() == userId)
+					.Select(h => new HouseAllViewModel
+					{
+						Id = h.Id.ToString(),
+						Title = h.Title,
+						Address = h.Address,
+						ImageUrl = h.ImageUrl,
+						PricePerMonth = h.PricePerMonth,
+						IsRented = h.RenterId.HasValue
+					})
+					.ToArrayAsync();
+			}
+
+			return myHouses;
+        }
 
 		public async Task<ICollection<IndexViewModel>> LastThreeHousesAsync()
 		{

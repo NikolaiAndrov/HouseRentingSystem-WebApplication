@@ -131,5 +131,24 @@
 
 			return RedirectToAction("All", "House");
 		}
+
+		[HttpGet]
+		public async Task<IActionResult> Mine()
+		{
+			ICollection<HouseAllViewModel> myHouses;
+
+			try
+			{
+				string userId = this.User.FindFirstValue(ClaimTypes.NameIdentifier);
+				myHouses = await this.houseService.GetAllHousesByUserOrAgentIdAsync(userId);
+			}
+			catch (Exception)
+			{
+				TempData[ErrorMessage] = "Unexpected error occured while retreiving your list of houses, please try later or contact administrator!";
+				return RedirectToAction("Index", "Home");
+			}
+
+			return View(myHouses);
+		}
 	}
 }

@@ -11,5 +11,7 @@
 		Task AddHouseAsync(HouseFormModel houseModel, string userId);
 
 		Task<AllHousesFilteredAndPagedServiceModel> AllAsync(AllHousesQueryModel allHousesQueryModel);
+
+		Task<ICollection<HouseAllViewModel>> GetAllHousesByUserOrAgentIdAsync(string userId);
 	}
 }
