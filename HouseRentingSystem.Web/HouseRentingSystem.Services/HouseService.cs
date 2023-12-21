@@ -16,11 +16,13 @@
 	{
 		private readonly HouseRentingDbContext dbContext;
 		private readonly IAgentService agentService;
+		private readonly CategoryService categoryService;
 
-        public HouseService(HouseRentingDbContext dbContext, IAgentService agentService)
+        public HouseService(HouseRentingDbContext dbContext, IAgentService agentService, CategoryService categoryService)
         {
             this.dbContext = dbContext;
 			this.agentService = agentService;
+			this.categoryService = categoryService;
         }
 
 		public async Task AddHouseAsync(HouseFormModel houseModel, string userId)
@@ -166,6 +168,28 @@
 				.FirstAsync();
 
 			return house;
+		}
+
+		public async Task<HouseFormModel> GetHouseForEditAsync(string houseId, string userId)
+		{
+			Guid agentId = await this.agentService.GetAgentIdAsync(userId);
+
+			HouseFormModel houseFormModel = await this.dbContext.Houses
+				.Where(h => h.IsActive && h.Id.ToString() == houseId && h.AgentId == agentId)
+				.Select(h => new HouseFormModel
+				{
+					Title = h.Title,
+					Address = h.Address,
+					Description = h.Description,
+					ImageUrl= h.ImageUrl,
+					PricePerMonth = h.PricePerMonth,
+					CategoryId = h.CategoryId
+				})
+				.FirstAsync();
+
+			houseFormModel.Categories = await this.categoryService.GetAllCategoriesAsync();
+			
+			return houseFormModel;
 		}
 
 		public async Task<ICollection<IndexViewModel>> LastThreeHousesAsync()

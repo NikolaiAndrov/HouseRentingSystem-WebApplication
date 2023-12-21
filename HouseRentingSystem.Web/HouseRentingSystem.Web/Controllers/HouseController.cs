@@ -169,5 +169,24 @@
 
 			return View(house);
 		}
+
+		[HttpGet]
+		public async Task<IActionResult> Edit(string id)
+		{
+			HouseFormModel house;
+
+			try
+			{
+				string userId = this.User.FindFirstValue(ClaimTypes.NameIdentifier);
+				house = await this.houseService.GetHouseForEditAsync(id, userId);
+			}
+			catch (Exception)
+			{
+				TempData[ErrorMessage] = "You do not have the permission to edit this house. To edit a house you must be the owner (Agent) of the house!";
+				return RedirectToAction("Index", "Home");
+			}
+
+			return View(house);
+		}
 	}
 }

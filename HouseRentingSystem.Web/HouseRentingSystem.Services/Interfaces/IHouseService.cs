@@ -15,5 +15,7 @@
 		Task<ICollection<HouseAllViewModel>> GetAllHousesByUserOrAgentIdAsync(string userId);
 
 		Task<HouseDetailViewModel> GetHouseDetailAsync(string houseId);
+
+		Task<HouseFormModel> GetHouseForEditAsync(string houseId, string userId);
 	}
 }
