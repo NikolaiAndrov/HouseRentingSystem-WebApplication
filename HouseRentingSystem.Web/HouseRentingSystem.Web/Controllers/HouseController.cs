@@ -150,5 +150,24 @@
 
 			return View(myHouses);
 		}
+
+		[HttpGet]
+		[AllowAnonymous]
+		public async Task<IActionResult> Details(string id)
+		{
+			HouseDetailViewModel house;
+
+			try
+			{
+				house = await this.houseService.GetHouseDetailAsync(id);
+			}
+			catch (Exception)
+			{
+				TempData[ErrorMessage] = "House not found!";
+				return RedirectToAction("Index", "Home");
+			}
+
+			return View(house);
+		}
 	}
 }

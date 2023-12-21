@@ -13,5 +13,7 @@
 		Task<AllHousesFilteredAndPagedServiceModel> AllAsync(AllHousesQueryModel allHousesQueryModel);
 
 		Task<ICollection<HouseAllViewModel>> GetAllHousesByUserOrAgentIdAsync(string userId);
+
+		Task<HouseDetailViewModel> GetHouseDetailAsync(string houseId);
 	}
 }
