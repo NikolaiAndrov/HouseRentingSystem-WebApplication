@@ -239,6 +239,14 @@
 		public async Task<bool> IsHouseExistingByIdAsync(string houseId)
 			=> await this.dbContext.Houses.AnyAsync(h => h.IsActive && h.Id.ToString() == houseId);
 
+		public async Task<bool> IsHouseRented(string houseId)
+		{
+			House house = await this.dbContext.Houses
+				.FirstAsync(h => h.IsActive && h.Id.ToString() == houseId);
+
+			return house.RenterId.HasValue;
+		}
+
 		public async Task<ICollection<IndexViewModel>> LastThreeHousesAsync()
 		{
 			ICollection<IndexViewModel> indexHouses = await dbContext.Houses
@@ -254,6 +262,16 @@
 				.ToArrayAsync();
 
 			return indexHouses;
+		}
+
+		public async Task RentHouseAsync(string houseId, string userId)
+		{
+			House house = await this.dbContext.Houses
+				.FirstAsync(h => h.IsActive && h.Id.ToString() == houseId);
+
+			house.RenterId = Guid.Parse(userId);
+
+			await this.dbContext.SaveChangesAsync();
 		}
 	}
 }

@@ -25,5 +25,9 @@
 		Task<HouseDeleteViewModel> GetHouseForDeleteByIdAsync(string houseId, string userId);
 
 		Task DeleteHouseById(string houseId, string userId);
+
+		Task<bool> IsHouseRented(string houseId);
+
+		Task RentHouseAsync(string houseId, string userId);
 	}
 }
