@@ -104,6 +104,18 @@
 			return model;
 		}
 
+		public async Task DeleteHouseById(string houseId, string userId)
+		{
+			Guid agentId = await this.agentService.GetAgentIdAsync(userId);
+
+			House houseToDelete = await this.dbContext.Houses
+				.FirstAsync(h => h.IsActive && h.Id.ToString() == houseId && h.AgentId == agentId);
+
+			houseToDelete.IsActive = false;
+
+			await this.dbContext.SaveChangesAsync();
+		}
+
 		public async Task EditHouseAsync(HouseFormModel house, string userId, string houseId)
 		{
 			Guid agentId = await this.agentService.GetAgentIdAsync(userId);
@@ -185,6 +197,23 @@
 				.FirstAsync();
 
 			return house;
+		}
+
+		public async Task<HouseDeleteViewModel> GetHouseForDeleteByIdAsync(string houseId, string userId)
+		{
+			Guid agentId = await this.agentService.GetAgentIdAsync(userId);
+
+			HouseDeleteViewModel houseToDelete = await this.dbContext.Houses
+				.Where(h => h.IsActive && h.Id.ToString() == houseId && h.AgentId == agentId)
+				.Select(h => new HouseDeleteViewModel
+				{
+					Title = h.Title,
+					Address = h.Address,
+					ImageUrl = h.ImageUrl,
+				})
+				.FirstAsync();
+
+			return houseToDelete;
 		}
 
 		public async Task<HouseFormModel> GetHouseForEditAsync(string houseId, string userId)

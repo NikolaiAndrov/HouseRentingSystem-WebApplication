@@ -38,8 +38,7 @@
 			}
 			catch (Exception)
 			{
-				TempData[ErrorMessage] = "Unexpected error occured, please try later or contact administrator!";
-				return RedirectToAction("Index", "Home");
+				this.GeneralError();
 			}
 
 			return View(queryModel);
@@ -60,8 +59,7 @@
 			}
 			catch (Exception)
 			{
-				TempData[ErrorMessage] = "Unexpected error occured, please try later or contact administrator!";
-				return RedirectToAction("Index", "Home");
+				this.GeneralError();
 			}
 
 			if (!isAgent)
@@ -188,8 +186,7 @@
 			}
 			catch (Exception)
 			{
-				TempData[ErrorMessage] = "Unexpected error occured while trying to execute your request, please try later or contact administrator!";
-				return RedirectToAction("Index", "Home");
+				this.GeneralError();
 			}
 
 			if (!isAgentExisting)
@@ -235,8 +232,7 @@
 			}
 			catch (Exception)
 			{
-				TempData[ErrorMessage] = "Unexpected error occured while trying to execute your request, please try later or contact administrator!";
-				return RedirectToAction("Index", "Home");
+				this.GeneralError();
 			}
 
 			if (!isAgentExisting)
@@ -247,7 +243,7 @@
 
 			if (!isHouseExisting)
 			{
-				TempData[ErrorMessage] = "It seems the house You looking for is no longer available!";
+				TempData[ErrorMessage] = "It seems that the house You looking for is no longer available!";
 				return RedirectToAction("Index", "Home");
 			}
 
@@ -270,11 +266,109 @@
 			catch (Exception)
 			{
 				TempData[ErrorMessage] = "You do not have the permission to edit this house. To edit a house you must be the owner (Agent) of the house!";
-				return RedirectToAction("All", "House");
+				return RedirectToAction("Mine", "House");
 			}
 
 			TempData[SuccessMessage] = "You have edited the house successfuly!";
 			return RedirectToAction("Details", "House", new { Id });
+		}
+
+		[HttpGet]
+		public async Task<IActionResult> Delete(string id)
+		{
+			bool isAgentExisting = false;
+			bool isHouseExisting = false;
+			string userId;
+
+			try
+			{
+				userId = this.User.FindFirstValue(ClaimTypes.NameIdentifier);
+				isAgentExisting = await this.agentService.IsAgentExistingAsync(userId);
+				isHouseExisting = await this.houseService.IsHouseExistingByIdAsync(id);
+			}
+			catch (Exception)
+			{
+				TempData[ErrorMessage] = "Unexpected error occured while trying to execute your request, please try later or contact administrator!";
+				return RedirectToAction("Index", "Home");
+			}
+
+			if (!isAgentExisting)
+			{
+				TempData[ErrorMessage] = "To delete a house you must be an agent and house must be yours!";
+				return RedirectToAction("Become", "Agent");
+			}
+
+			if (!isHouseExisting)
+			{
+				TempData[ErrorMessage] = "It seems that the house You looking for is no longer available!";
+				return RedirectToAction("Index", "Home");
+			}
+
+			HouseDeleteViewModel houseToDelete;
+
+			try
+			{
+				houseToDelete = await this.houseService.GetHouseForDeleteByIdAsync(id, userId);
+			}
+			catch (Exception)
+			{
+				TempData[ErrorMessage] = "You do not have the permission to delete this house. To delete a house you must be the owner (Agent) of the house!";
+				return RedirectToAction("Mine", "House");
+			}
+
+			TempData[WarningMessage] = "You are about to delete this house!";
+			return View(houseToDelete);
+		}
+
+		[HttpPost]
+		public async Task<IActionResult> Delete(string id, HouseDeleteViewModel model)
+		{
+			bool isAgentExisting = false;
+			bool isHouseExisting = false;
+			string userId;
+
+			try
+			{
+				userId = this.User.FindFirstValue(ClaimTypes.NameIdentifier);
+				isAgentExisting = await this.agentService.IsAgentExistingAsync(userId);
+				isHouseExisting = await this.houseService.IsHouseExistingByIdAsync(id);
+			}
+			catch (Exception)
+			{
+				TempData[ErrorMessage] = "Unexpected error occured while trying to execute your request, please try later or contact administrator!";
+				return RedirectToAction("Index", "Home");
+			}
+
+			if (!isAgentExisting)
+			{
+				TempData[ErrorMessage] = "To delete a house you must be an agent and house must be yours!";
+				return RedirectToAction("Become", "Agent");
+			}
+
+			if (!isHouseExisting)
+			{
+				TempData[ErrorMessage] = "It seems that the house You looking for is no longer available!";
+				return RedirectToAction("Index", "Home");
+			}
+
+			try
+			{
+				await this.houseService.DeleteHouseById(id, userId);
+			}
+			catch (Exception)
+			{
+				TempData[ErrorMessage] = "You do not have the permission to delete this house. To delete a house you must be the owner (Agent) of the house!";
+				return RedirectToAction("Mine", "House");
+			}
+
+			TempData[SuccessMessage] = "You have successfully deleted the house!";
+			return RedirectToAction("Mine", "House");
+		}
+
+		private IActionResult GeneralError()
+		{
+			TempData[ErrorMessage] = "Unexpected error occured while trying to execute your request, please try later or contact administrator!";
+			return RedirectToAction("Index", "Home");
 		}
 	}
 }

@@ -21,5 +21,9 @@
 		Task EditHouseAsync(HouseFormModel house, string userId, string houseId);
 
 		Task<bool> IsHouseExistingByIdAsync(string houseId);
+
+		Task<HouseDeleteViewModel> GetHouseForDeleteByIdAsync(string houseId, string userId);
+
+		Task DeleteHouseById(string houseId, string userId);
 	}
 }
