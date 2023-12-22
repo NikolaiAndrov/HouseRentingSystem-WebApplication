@@ -247,6 +247,14 @@
 			return house.RenterId.HasValue;
 		}
 
+		public async Task<bool> IsHouseRentedByCurrentUserAsync(string houseId, string userId)
+		{
+			House house = await this.dbContext.Houses
+				.FirstAsync(h => h.IsActive && h.Id.ToString() == houseId);
+
+			return house.RenterId.HasValue && house.RenterId.ToString() == userId;
+		}
+
 		public async Task<ICollection<IndexViewModel>> LastThreeHousesAsync()
 		{
 			ICollection<IndexViewModel> indexHouses = await dbContext.Houses
@@ -262,6 +270,16 @@
 				.ToArrayAsync();
 
 			return indexHouses;
+		}
+
+		public async Task LeaveHouseAsync(string houseId)
+		{
+			House house = await this.dbContext.Houses
+				.FirstAsync(h => h.IsActive && h.Id.ToString() == houseId);
+
+			house.RenterId = null;
+
+			await this.dbContext.SaveChangesAsync();
 		}
 
 		public async Task RentHouseAsync(string houseId, string userId)

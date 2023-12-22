@@ -3,6 +3,7 @@
 	using HouseRentingSystem.Services.Data.Models;
 	using HouseRentingSystem.Web.ViewModels.Home;
 	using HouseRentingSystem.Web.ViewModels.House;
+	using System.Diagnostics.SymbolStore;
 
 	public interface IHouseService
 	{
@@ -29,5 +30,9 @@
 		Task<bool> IsHouseRented(string houseId);
 
 		Task RentHouseAsync(string houseId, string userId);
+
+		Task LeaveHouseAsync(string houseId);
+
+		Task<bool> IsHouseRentedByCurrentUserAsync(string houseId, string userId);
 	}
 }

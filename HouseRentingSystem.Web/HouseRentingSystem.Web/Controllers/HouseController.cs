@@ -401,7 +401,7 @@
 			if (isAgent)
 			{
 				TempData[ErrorMessage] = "Agents cannot rent houses!";
-				return RedirectToAction("Index", "Home");
+				return RedirectToAction("All", "House");
 			}
 
 			try
@@ -415,6 +415,67 @@
 			}
 
 			TempData[SuccessMessage] = "House rented successfully!";
+			return RedirectToAction("Mine", "House");
+		}
+
+		[HttpPost]
+		public async Task<IActionResult> Leave(string id)
+		{
+			bool isHouseExisting;
+			bool isHouseRented;
+			bool isAgent;
+			bool isHouseRentedByCurrentUser;
+			string userId;
+
+			try
+			{
+				isHouseExisting = await this.houseService.IsHouseExistingByIdAsync(id);
+				isHouseRented = await this.houseService.IsHouseRented(id);
+				userId = this.User.FindFirstValue(ClaimTypes.NameIdentifier);
+				isAgent = await this.agentService.IsAgentExistingAsync(userId);
+				isHouseRentedByCurrentUser = await this.houseService.IsHouseRentedByCurrentUserAsync(id, userId);
+			}
+			catch (Exception)
+			{
+				TempData[ErrorMessage] = "Unexpected error occured while trying to execute your request, please try later or contact administrator!";
+				return RedirectToAction("Index", "Home");
+			}
+
+			if (!isHouseExisting)
+			{
+				TempData[ErrorMessage] = "It seems that the house You are looking for is no longer available!";
+				return RedirectToAction("Index", "Home");
+			}
+
+			if (!isHouseRented)
+			{
+				TempData[ErrorMessage] = "This house is still not rented!";
+				return RedirectToAction("All", "House");
+			}
+
+			if (isAgent)
+			{
+				TempData[ErrorMessage] = "Agents cannot rent or leve houses!";
+				return RedirectToAction("All", "House");
+			}
+
+			if (!isHouseRentedByCurrentUser)
+			{
+				TempData[ErrorMessage] = "This action can be performed only by the renter of the house!";
+				return RedirectToAction("Mine", "House");
+			}
+
+			try
+			{
+				await this.houseService.LeaveHouseAsync(id);
+			}
+			catch (Exception)
+			{
+				TempData[ErrorMessage] = "Unexpected error occured while trying to execute your request, please try later or contact administrator!";
+				return RedirectToAction("Index", "Home");
+			}
+
+			TempData[SuccessMessage] = "You left the house successfully!";
 			return RedirectToAction("Mine", "House");
 		}
 
