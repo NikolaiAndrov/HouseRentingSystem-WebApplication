@@ -61,7 +61,7 @@
 			if (hasRents)
 			{
 				TempData[ErrorMessage] = "To became an agent You must not have any active rents!";
-                return RedirectToAction("Index", "Home");
+                return RedirectToAction("Mine", "House");
             }
 
 			try
