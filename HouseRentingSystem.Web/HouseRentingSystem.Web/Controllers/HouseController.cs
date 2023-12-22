@@ -15,7 +15,7 @@
 		private readonly IAgentService agentService;
 		private readonly ICategoryService categoryService;
 
-		public HouseController(IHouseService houseService, IAgentService agentService, ICategoryService categoryService) 
+		public HouseController(IHouseService houseService, IAgentService agentService, ICategoryService categoryService)
 		{
 			this.houseService = houseService;
 			this.agentService = agentService;
@@ -25,7 +25,7 @@
 
 		[AllowAnonymous]
 		[HttpGet]
-		public async Task<IActionResult> All([FromQuery]AllHousesQueryModel queryModel)
+		public async Task<IActionResult> All([FromQuery] AllHousesQueryModel queryModel)
 		{
 			AllHousesFilteredAndPagedServiceModel serviceModel;
 
@@ -119,9 +119,11 @@
 				return View(model);
 			}
 
+			string houseId;
+
 			try
 			{
-				await this.houseService.AddHouseAsync(model, userId);
+				houseId = await this.houseService.AddHouseAndGetHouseIdAsync(model, userId);
 			}
 			catch (Exception)
 			{
@@ -130,7 +132,7 @@
 			}
 
 			TempData[SuccessMessage] = "You have added a new house successfuly";
-			return RedirectToAction("All", "House");
+			return RedirectToAction("Details", "House", new {id = houseId});
 		}
 
 		[HttpGet]
@@ -180,7 +182,7 @@
 
 			try
 			{
-				string userId =	this.User.FindFirstValue(ClaimTypes.NameIdentifier);
+				string userId = this.User.FindFirstValue(ClaimTypes.NameIdentifier);
 				isAgentExisting = await this.agentService.IsAgentExistingAsync(userId);
 				isHouseExisting = await this.houseService.IsHouseExistingByIdAsync(Id);
 			}
@@ -272,7 +274,7 @@
 			}
 
 			TempData[SuccessMessage] = "You have edited the house successfuly!";
-			return RedirectToAction("Details", "House", new {Id});
+			return RedirectToAction("Details", "House", new { Id });
 		}
 	}
 }

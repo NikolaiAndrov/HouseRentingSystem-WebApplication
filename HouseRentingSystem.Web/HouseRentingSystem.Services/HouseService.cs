@@ -23,7 +23,7 @@
 			this.agentService = agentService;
         }
 
-		public async Task AddHouseAsync(HouseFormModel houseModel, string userId)
+		public async Task<string> AddHouseAndGetHouseIdAsync(HouseFormModel houseModel, string userId)
 		{
 			Guid agentId = await this.agentService.GetAgentIdAsync(userId);
 
@@ -41,6 +41,8 @@
 
 			await this.dbContext.Houses.AddAsync(house);
 			await this.dbContext.SaveChangesAsync();
+
+			return house.Id.ToString();
 		}
 
 		public async Task<AllHousesFilteredAndPagedServiceModel> AllAsync(AllHousesQueryModel allHousesQueryModel)

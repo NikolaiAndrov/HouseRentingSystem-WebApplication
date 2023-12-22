@@ -8,7 +8,7 @@
 	{
 		Task<ICollection<IndexViewModel>> LastThreeHousesAsync();
 
-		Task AddHouseAsync(HouseFormModel houseModel, string userId);
+		Task<string> AddHouseAndGetHouseIdAsync(HouseFormModel houseModel, string userId);
 
 		Task<AllHousesFilteredAndPagedServiceModel> AllAsync(AllHousesQueryModel allHousesQueryModel);
 
