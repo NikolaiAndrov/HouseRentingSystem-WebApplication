@@ -1,18 +1,19 @@
 ﻿namespace HouseRentingSystem.Services
 {
-	using HouseRentingSystem.Data;
-	using HouseRentingSystem.Data.Models;
-	using HouseRentingSystem.Services.Data.Models;
+    using HouseRentingSystem.Data;
+    using HouseRentingSystem.Data.Models;
+    using HouseRentingSystem.Services.Data.Models.House;
+	using HouseRentingSystem.Services.Data.Models.Statistics;
 	using HouseRentingSystem.Services.Interfaces;
-	using HouseRentingSystem.Web.ViewModels.Agent;
-	using HouseRentingSystem.Web.ViewModels.Home;
-	using HouseRentingSystem.Web.ViewModels.House;
-	using HouseRentingSystem.Web.Views.House.Enums;
-	using Microsoft.EntityFrameworkCore;
-	using System.Collections.Generic;
-	using System.Threading.Tasks;
+    using HouseRentingSystem.Web.ViewModels.Agent;
+    using HouseRentingSystem.Web.ViewModels.Home;
+    using HouseRentingSystem.Web.ViewModels.House;
+    using HouseRentingSystem.Web.Views.House.Enums;
+    using Microsoft.EntityFrameworkCore;
+    using System.Collections.Generic;
+    using System.Threading.Tasks;
 
-	public class HouseService : IHouseService
+    public class HouseService : IHouseService
 	{
 		private readonly HouseRentingDbContext dbContext;
 		private readonly IAgentService agentService;
@@ -234,6 +235,24 @@
 				.FirstAsync();
 			
 			return houseFormModel;
+		}
+
+		public async Task<StatisticsServiceModel> GetStatisticsAsync()
+		{
+			int housesCount = await this.dbContext.Houses
+				.CountAsync();
+
+			int rentedHouses = await this.dbContext.Houses
+				.Where(h => h.RenterId.HasValue)
+				.CountAsync();
+
+			StatisticsServiceModel statisticsServiceModel = new StatisticsServiceModel
+			{
+				TotalHouses = housesCount,
+				TotalRents = rentedHouses
+			};
+
+			return statisticsServiceModel;
 		}
 
 		public async Task<bool> IsHouseExistingByIdAsync(string houseId)

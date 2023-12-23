@@ -1,14 +1,14 @@
 ﻿namespace HouseRentingSystem.Web.Controllers
 {
-	using HouseRentingSystem.Services.Data.Models;
-	using HouseRentingSystem.Services.Interfaces;
-	using HouseRentingSystem.Web.ViewModels.House;
-	using Microsoft.AspNetCore.Authorization;
-	using Microsoft.AspNetCore.Mvc;
-	using System.Security.Claims;
-	using static Common.NotificationConstantMessages;
+    using HouseRentingSystem.Services.Data.Models.House;
+    using HouseRentingSystem.Services.Interfaces;
+    using HouseRentingSystem.Web.ViewModels.House;
+    using Microsoft.AspNetCore.Authorization;
+    using Microsoft.AspNetCore.Mvc;
+    using System.Security.Claims;
+    using static Common.NotificationConstantMessages;
 
-	[Authorize]
+    [Authorize]
 	public class HouseController : Controller
 	{
 		private readonly IHouseService houseService;

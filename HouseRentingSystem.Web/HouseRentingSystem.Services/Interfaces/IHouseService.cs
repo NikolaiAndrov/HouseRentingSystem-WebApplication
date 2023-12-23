@@ -1,11 +1,12 @@
 ﻿namespace HouseRentingSystem.Services.Interfaces
 {
-	using HouseRentingSystem.Services.Data.Models;
+    using HouseRentingSystem.Services.Data.Models.House;
+	using HouseRentingSystem.Services.Data.Models.Statistics;
 	using HouseRentingSystem.Web.ViewModels.Home;
-	using HouseRentingSystem.Web.ViewModels.House;
-	using System.Diagnostics.SymbolStore;
+    using HouseRentingSystem.Web.ViewModels.House;
+    using System.Diagnostics.SymbolStore;
 
-	public interface IHouseService
+    public interface IHouseService
 	{
 		Task<ICollection<IndexViewModel>> LastThreeHousesAsync();
 
@@ -34,5 +35,7 @@
 		Task LeaveHouseAsync(string houseId);
 
 		Task<bool> IsHouseRentedByCurrentUserAsync(string houseId, string userId);
+
+		Task<StatisticsServiceModel> GetStatisticsAsync();
 	}
 }
