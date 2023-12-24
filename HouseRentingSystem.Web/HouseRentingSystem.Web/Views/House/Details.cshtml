@@ -1,6 +1,19 @@
 ﻿@model HouseDetailViewModel
+@using System.Security.Claims;
+@using HouseRentingSystem.Services.Interfaces
+
+@inject IAgentService AgentService;
+@inject IHouseService HouseService;
+
 @{
 	ViewBag.Title = "House Details";
+}
+
+@{
+	string userId = this.User.FindFirstValue(ClaimTypes.NameIdentifier);
+	bool isUserAgent = await this.AgentService.IsAgentExistingAsync(userId);
+	bool isAgentOwnerOfTheHouse = await this.AgentService.IsAgentOwnerOfTheHouse(userId, Model.Id);
+	bool isCurrentUserRenter = await this.HouseService.IsHouseRentedByCurrentUserAsync(Model.Id, userId);
 }
 
 <h2 class="text-center">@ViewBag.Title</h2>
@@ -25,18 +38,21 @@
 			<div class="form-inline">
 				@if (this.User.Identity?.IsAuthenticated ?? false)
 				{
-					<a class="btn btn-warning" asp-controller="House" asp-action="Edit"
-					   asp-route-id="@Model.Id">Edit</a>
-					<a class="ml-2 btn btn-danger" asp-controller="House" asp-action="Delete"
-					   asp-route-id="@Model.Id">Delete</a>
-					@if (!Model.IsRented)
+					@if (isAgentOwnerOfTheHouse)
+					{
+						<a class="btn btn-warning" asp-controller="House" asp-action="Edit"
+						   asp-route-id="@Model.Id">Edit</a>
+						<a class="ml-2 btn btn-danger" asp-controller="House" asp-action="Delete"
+						   asp-route-id="@Model.Id">Delete</a>
+					}
+					@if (!Model.IsRented && !isUserAgent)
 					{
 						<form class="ml-2" asp-controller="House"
 							  asp-action="Rent" asp-route-id="@Model.Id" method="post">
 							<input class="btn btn-primary" type="submit" value="Rent" />
 						</form>
 					}
-					else
+					else if (Model.IsRented && isCurrentUserRenter)
 					{
 						<form class="ml-2" asp-controller="House" asp-action="Leave"
 							  asp-route-id="@Model.Id" method="post">
