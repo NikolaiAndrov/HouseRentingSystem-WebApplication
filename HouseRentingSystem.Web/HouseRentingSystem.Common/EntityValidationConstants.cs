@@ -30,5 +30,13 @@
             public const int PhoneMinLength = 7;
             public const int PhoneMaxLength = 15;
         }
+
+        public static class UserValidation
+        {
+            public const int FirstNameMinLength = 1;
+            public const int FirstNameMaxLength = 15;
+			public const int LastNameMinLength = 1;
+			public const int LastNameMaxLength = 15;
+		}
     }
 }
