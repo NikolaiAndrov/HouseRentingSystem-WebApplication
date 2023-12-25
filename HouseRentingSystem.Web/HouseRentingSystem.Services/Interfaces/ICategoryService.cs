@@ -9,5 +9,9 @@
 		Task<bool> IsCategoryExistingByIdAsync(int id);
 
 		Task<ICollection<string>> AllCategoriesNameAsync();
+
+		Task<ICollection<AllCategoriesViewModel>> GetAllCategoriesForListingAsync();
+
+		Task<CategoryDetailsViewModel> GetCategoryDetailsAsync(int id);
 	}
 }

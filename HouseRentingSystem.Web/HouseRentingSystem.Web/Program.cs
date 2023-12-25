@@ -75,9 +75,15 @@ namespace HouseRentingSystem.Web
             app.UseAuthentication();
             app.UseAuthorization();
 
-            app.MapDefaultControllerRoute();
-            app.MapRazorPages();
-
+            app.UseEndpoints(endpoints =>
+            {
+                endpoints.MapControllerRoute(name: "ProtectingUrlRoute", 
+                    pattern: "/{controller}/{action}/{id}/{information}", 
+                    defaults: new { Controller = "Category", Action = "Details" });
+                endpoints.MapDefaultControllerRoute();
+                endpoints.MapRazorPages();
+            });
+           
             app.Run();
         }
     }
