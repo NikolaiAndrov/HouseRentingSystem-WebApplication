@@ -191,6 +191,7 @@
 					Category = h.Category.Name,
 					Agent = new AgentForHouseDetailViewMopdel
 					{
+						FullName = h.Agent.User.FirstName + " " + h.Agent.User.LastName,
 						Email = h.Agent.User.Email,
 						PhoneNumber = h.Agent.PhoneNumber
 					}
