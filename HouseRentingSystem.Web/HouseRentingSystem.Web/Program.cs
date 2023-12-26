@@ -53,6 +53,11 @@ namespace HouseRentingSystem.Web
             builder.Services.AddScoped<IAgentService, AgentService>();
             builder.Services.AddScoped<ICategoryService, CategoryService>();
 
+            builder.Services.ConfigureApplicationCookie(cfg =>
+            {
+                cfg.LoginPath = "/User/Login";
+            });
+
             WebApplication app = builder.Build();
 
             if (app.Environment.IsDevelopment())
