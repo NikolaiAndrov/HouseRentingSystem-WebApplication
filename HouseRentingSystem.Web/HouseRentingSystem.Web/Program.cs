@@ -1,14 +1,14 @@
 namespace HouseRentingSystem.Web
 {
-    using HouseRentingSystem.Data;
-    using HouseRentingSystem.Data.Models;
+    using Microsoft.EntityFrameworkCore;
+	using HouseRentingSystem.Data;
+	using HouseRentingSystem.Data.Models;
 	using HouseRentingSystem.Services;
 	using HouseRentingSystem.Services.Interfaces;
 	using HouseRentingSystem.Web.Infrastructure.ModelBinders;
-    using Microsoft.AspNetCore.Mvc;
-    using Microsoft.EntityFrameworkCore;
+	using Microsoft.AspNetCore.Mvc;
 
-    public class Program
+	public class Program
     {
         public static void Main(string[] args)
         {
