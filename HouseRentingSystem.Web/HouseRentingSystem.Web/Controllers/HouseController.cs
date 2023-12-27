@@ -2,7 +2,8 @@
 {
     using HouseRentingSystem.Services.Data.Models.House;
     using HouseRentingSystem.Services.Interfaces;
-    using HouseRentingSystem.Web.ViewModels.House;
+	using HouseRentingSystem.Web.Infrastructure.Extensions;
+	using HouseRentingSystem.Web.ViewModels.House;
     using Microsoft.AspNetCore.Authorization;
     using Microsoft.AspNetCore.Mvc;
     using System.Security.Claims;
@@ -140,8 +141,9 @@
 
 			try
 			{
+				bool isAdimn = this.User.IsAdmin();
 				string userId = this.User.FindFirstValue(ClaimTypes.NameIdentifier);
-				myHouses = await this.houseService.GetAllHousesByUserOrAgentIdAsync(userId);
+				myHouses = await this.houseService.GetAllHousesByUserOrAgentIdAsync(userId, isAdimn);
 			}
 			catch (Exception)
 			{
@@ -189,7 +191,7 @@
 				this.GeneralError();
 			}
 
-			if (!isAgentExisting)
+			if (!isAgentExisting && !this.User.IsAdmin())
 			{
 				TempData[ErrorMessage] = "To edit a house you must be an agent and house must be yours!";
 				return RedirectToAction("Become", "Agent");
@@ -203,8 +205,9 @@
 
 			try
 			{
+				bool isAdmin = this.User.IsAdmin();
 				string userId = this.User.FindFirstValue(ClaimTypes.NameIdentifier);
-				house = await this.houseService.GetHouseForEditAsync(Id, userId);
+				house = await this.houseService.GetHouseForEditAsync(Id, userId, isAdmin);
 				house.Categories = await this.categoryService.GetAllCategoriesAsync();
 			}
 			catch (Exception)
@@ -235,7 +238,7 @@
 				this.GeneralError();
 			}
 
-			if (!isAgentExisting)
+			if (!isAgentExisting && !this.User.IsAdmin())
 			{
 				TempData[ErrorMessage] = "To edit a house you must be an agent and house must be yours!";
 				return RedirectToAction("Become", "Agent");
@@ -260,8 +263,9 @@
 
 			try
 			{
+				bool isAdmin = this.User.IsAdmin();
 				string userId = this.User.FindFirstValue(ClaimTypes.NameIdentifier);
-				await this.houseService.EditHouseAsync(model, userId, Id);
+				await this.houseService.EditHouseAsync(model, userId, Id, isAdmin);
 			}
 			catch (Exception)
 			{
@@ -292,7 +296,7 @@
 				return RedirectToAction("Index", "Home");
 			}
 
-			if (!isAgentExisting)
+			if (!isAgentExisting && !this.User.IsAdmin())
 			{
 				TempData[ErrorMessage] = "To delete a house you must be an agent and house must be yours!";
 				return RedirectToAction("Become", "Agent");
@@ -308,7 +312,8 @@
 
 			try
 			{
-				houseToDelete = await this.houseService.GetHouseForDeleteByIdAsync(id, userId);
+				bool isAdmin = this.User.IsAdmin();
+				houseToDelete = await this.houseService.GetHouseForDeleteByIdAsync(id, userId, isAdmin);
 			}
 			catch (Exception)
 			{
@@ -339,7 +344,7 @@
 				return RedirectToAction("Index", "Home");
 			}
 
-			if (!isAgentExisting)
+			if (!isAgentExisting && !this.User.IsAdmin())
 			{
 				TempData[ErrorMessage] = "To delete a house you must be an agent and house must be yours!";
 				return RedirectToAction("Become", "Agent");
@@ -353,7 +358,8 @@
 
 			try
 			{
-				await this.houseService.DeleteHouseById(id, userId);
+				bool isAdmin = this.User.IsAdmin();
+				await this.houseService.DeleteHouseById(id, userId, isAdmin);
 			}
 			catch (Exception)
 			{
@@ -398,7 +404,7 @@
 				return RedirectToAction("All", "House");
 			}
 
-			if (isAgent)
+			if (isAgent && !this.User.IsAdmin())
 			{
 				TempData[ErrorMessage] = "Agents cannot rent houses!";
 				return RedirectToAction("All", "House");
@@ -453,7 +459,7 @@
 				return RedirectToAction("All", "House");
 			}
 
-			if (isAgent)
+			if (isAgent && !this.User.IsAdmin())
 			{
 				TempData[ErrorMessage] = "Agents cannot rent or leve houses!";
 				return RedirectToAction("All", "House");

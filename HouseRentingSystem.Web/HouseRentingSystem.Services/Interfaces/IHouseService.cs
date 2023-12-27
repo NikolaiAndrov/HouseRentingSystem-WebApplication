@@ -14,19 +14,19 @@
 
 		Task<AllHousesFilteredAndPagedServiceModel> AllAsync(AllHousesQueryModel allHousesQueryModel);
 
-		Task<ICollection<HouseAllViewModel>> GetAllHousesByUserOrAgentIdAsync(string userId);
+		Task<ICollection<HouseAllViewModel>> GetAllHousesByUserOrAgentIdAsync(string userId, bool isAdimn);
 
 		Task<HouseDetailViewModel> GetHouseDetailAsync(string houseId);
 
-		Task<HouseFormModel> GetHouseForEditAsync(string houseId, string userId);
+		Task<HouseFormModel> GetHouseForEditAsync(string houseId, string userId, bool isAdmin);
 
-		Task EditHouseAsync(HouseFormModel house, string userId, string houseId);
+		Task EditHouseAsync(HouseFormModel house, string userId, string houseId, bool isAdmin);
 
 		Task<bool> IsHouseExistingByIdAsync(string houseId);
 
-		Task<HouseDeleteViewModel> GetHouseForDeleteByIdAsync(string houseId, string userId);
+		Task<HouseDeleteViewModel> GetHouseForDeleteByIdAsync(string houseId, string userId, bool isAdmin);
 
-		Task DeleteHouseById(string houseId, string userId);
+		Task DeleteHouseById(string houseId, string userId, bool isAdmin);
 
 		Task<bool> IsHouseRented(string houseId);
 

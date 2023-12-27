@@ -105,24 +105,24 @@
 			return model;
 		}
 
-		public async Task DeleteHouseById(string houseId, string userId)
+		public async Task DeleteHouseById(string houseId, string userId, bool isAdmin)
 		{
 			Guid agentId = await this.agentService.GetAgentIdAsync(userId);
 
 			House houseToDelete = await this.dbContext.Houses
-				.FirstAsync(h => h.IsActive && h.Id.ToString() == houseId && h.AgentId == agentId);
+				.FirstAsync(h => h.IsActive && h.Id.ToString() == houseId && (h.AgentId == agentId || isAdmin));
 
 			houseToDelete.IsActive = false;
 
 			await this.dbContext.SaveChangesAsync();
 		}
 
-		public async Task EditHouseAsync(HouseFormModel house, string userId, string houseId)
+		public async Task EditHouseAsync(HouseFormModel house, string userId, string houseId, bool isAdmin)
 		{
 			Guid agentId = await this.agentService.GetAgentIdAsync(userId);
 
 			House houseToEdit = await this.dbContext.Houses
-				.FirstAsync(h => h.IsActive && h.Id.ToString() == houseId && h.AgentId == agentId);
+				.FirstAsync(h => h.IsActive && h.Id.ToString() == houseId && (h.AgentId == agentId || isAdmin));
 
 			houseToEdit.Title = house.Title;
 			houseToEdit.Address = house.Address;
@@ -134,12 +134,12 @@
 			await this.dbContext.SaveChangesAsync();
 		}
 
-		public async Task<ICollection<HouseAllViewModel>> GetAllHousesByUserOrAgentIdAsync(string userId)
+		public async Task<ICollection<HouseAllViewModel>> GetAllHousesByUserOrAgentIdAsync(string userId, bool isAdimn)
 		{
 			ICollection<HouseAllViewModel> myHouses;
 			bool isAgent = await this.agentService.IsAgentExistingAsync(userId);
 
-            if (isAgent)
+            if (isAgent && !isAdimn)
             {
                 Guid agentId = await this.agentService.GetAgentIdAsync(userId);
 
@@ -156,6 +156,23 @@
 					})
 					.ToArrayAsync();
             }
+			else if (isAdimn && isAgent)
+			{
+				Guid agentId = await this.agentService.GetAgentIdAsync(userId);
+
+				myHouses = await this.dbContext.Houses
+					.Where(h => h.IsActive && (h.RenterId.HasValue && h.RenterId.ToString() == userId) || h.AgentId == agentId)
+					.Select(h => new HouseAllViewModel
+					{
+						Id = h.Id.ToString(),
+						Title = h.Title,
+						Address = h.Address,
+						ImageUrl = h.ImageUrl,
+						PricePerMonth = h.PricePerMonth,
+						IsRented = h.RenterId.HasValue
+					})
+					.ToArrayAsync();
+			}
 			else
 			{
 				myHouses = await this.dbContext.Houses
@@ -201,12 +218,12 @@
 			return house;
 		}
 
-		public async Task<HouseDeleteViewModel> GetHouseForDeleteByIdAsync(string houseId, string userId)
+		public async Task<HouseDeleteViewModel> GetHouseForDeleteByIdAsync(string houseId, string userId, bool isAdmin)
 		{
 			Guid agentId = await this.agentService.GetAgentIdAsync(userId);
 
 			HouseDeleteViewModel houseToDelete = await this.dbContext.Houses
-				.Where(h => h.IsActive && h.Id.ToString() == houseId && h.AgentId == agentId)
+				.Where(h => h.IsActive && h.Id.ToString() == houseId && (h.AgentId == agentId || isAdmin))
 				.Select(h => new HouseDeleteViewModel
 				{
 					Title = h.Title,
@@ -218,12 +235,12 @@
 			return houseToDelete;
 		}
 
-		public async Task<HouseFormModel> GetHouseForEditAsync(string houseId, string userId)
+		public async Task<HouseFormModel> GetHouseForEditAsync(string houseId, string userId, bool isAdmin)
 		{
 			Guid agentId = await this.agentService.GetAgentIdAsync(userId);
 
 			HouseFormModel houseFormModel = await this.dbContext.Houses
-				.Where(h => h.IsActive && h.Id.ToString() == houseId && h.AgentId == agentId)
+				.Where(h => h.IsActive && h.Id.ToString() == houseId && (h.AgentId == agentId || isAdmin))
 				.Select(h => new HouseFormModel
 				{
 					Title = h.Title,

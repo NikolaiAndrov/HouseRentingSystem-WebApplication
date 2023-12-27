@@ -1,6 +1,7 @@
 ﻿@model HouseAllViewModel
 @using System.Security.Claims;
 @using HouseRentingSystem.Services.Interfaces
+@using static HouseRentingSystem.Common.GeneralConstants
 
 @inject IAgentService AgentService;
 @inject IHouseService HouseService;
@@ -28,7 +29,7 @@
 			   class="btn btn-success">Details</a>
 			@if (this.User.Identity?.IsAuthenticated ?? false)
 			{
-				@if (isAgentOwnerOfTheHouse)
+				@if (isAgentOwnerOfTheHouse || this.User.IsInRole(AdminRoleName))
 				{
 					<a asp-controller="House" asp-action="Edit" asp-route-id="@Model.Id"
 					   class="btn btn-warning">Edit</a>
@@ -36,7 +37,7 @@
 					   class="btn btn-danger">Delete</a>
 				}
 				<p></p>
-				@if (!Model.IsRented && !isUserAgent)
+				@if (!Model.IsRented && (!isUserAgent || this.User.IsInRole(AdminRoleName)))
 				{
 					<form class="input-group-sm" asp-controller="House"
 						  asp-action="Rent" asp-route-id="@Model.Id" method="post">
