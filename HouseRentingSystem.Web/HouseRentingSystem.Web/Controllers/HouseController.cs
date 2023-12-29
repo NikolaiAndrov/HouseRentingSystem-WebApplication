@@ -147,9 +147,18 @@
 
 			try
 			{
-				bool isAdimn = this.User.IsAdmin();
-				string userId = this.User.FindFirstValue(ClaimTypes.NameIdentifier);
-				myHouses = await this.houseService.GetAllHousesByUserOrAgentIdAsync(userId, isAdimn);
+				string userId = this.User.GetId();
+				bool isAgent = await this.agentService.IsAgentExistingAsync(userId);
+
+				if (isAgent)
+				{
+					Guid agentId = await this.agentService.GetAgentIdAsync(userId);
+					myHouses = await this.houseService.GetAllHousesByAgentIdAsync(agentId);
+				}
+				else
+				{
+					myHouses = await this.houseService.GetAllHousesByUserIdAsync(userId);
+				}
 			}
 			catch (Exception)
 			{

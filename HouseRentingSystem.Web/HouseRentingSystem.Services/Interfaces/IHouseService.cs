@@ -4,7 +4,6 @@
 	using HouseRentingSystem.Services.Data.Models.Statistics;
 	using HouseRentingSystem.Web.ViewModels.Home;
     using HouseRentingSystem.Web.ViewModels.House;
-    using System.Diagnostics.SymbolStore;
 
     public interface IHouseService
 	{
@@ -13,8 +12,6 @@
 		Task<string> AddHouseAndGetHouseIdAsync(HouseFormModel houseModel, string userId);
 
 		Task<AllHousesFilteredAndPagedServiceModel> AllAsync(AllHousesQueryModel allHousesQueryModel);
-
-		Task<ICollection<HouseAllViewModel>> GetAllHousesByUserOrAgentIdAsync(string userId, bool isAdimn);
 
 		Task<HouseDetailViewModel> GetHouseDetailAsync(string houseId);
 

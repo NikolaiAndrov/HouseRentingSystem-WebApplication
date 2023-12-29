@@ -152,64 +152,6 @@
 			return addedHouses;
 		}
 
-		public async Task<ICollection<HouseAllViewModel>> GetAllHousesByUserOrAgentIdAsync(string userId, bool isAdimn)
-		{
-			ICollection<HouseAllViewModel> myHouses;
-			bool isAgent = await this.agentService.IsAgentExistingAsync(userId);
-
-            if (isAgent && !isAdimn)
-            {
-                Guid agentId = await this.agentService.GetAgentIdAsync(userId);
-
-				myHouses = await this.dbContext.Houses
-					.Where(h => h.IsActive && h.AgentId == agentId)
-					.Select(h => new HouseAllViewModel
-					{
-						Id = h.Id.ToString(),
-						Title = h.Title,
-						Address = h.Address,
-						ImageUrl = h.ImageUrl,
-						PricePerMonth = h.PricePerMonth,
-						IsRented = h.RenterId.HasValue
-					})
-					.ToArrayAsync();
-            }
-			else if (isAdimn && isAgent)
-			{
-				Guid agentId = await this.agentService.GetAgentIdAsync(userId);
-
-				myHouses = await this.dbContext.Houses
-					.Where(h => h.IsActive && (h.RenterId.HasValue && h.RenterId.ToString() == userId) || h.AgentId == agentId)
-					.Select(h => new HouseAllViewModel
-					{
-						Id = h.Id.ToString(),
-						Title = h.Title,
-						Address = h.Address,
-						ImageUrl = h.ImageUrl,
-						PricePerMonth = h.PricePerMonth,
-						IsRented = h.RenterId.HasValue
-					})
-					.ToArrayAsync();
-			}
-			else
-			{
-				myHouses = await this.dbContext.Houses
-					.Where(h => h.IsActive && h.RenterId.HasValue && h.RenterId.ToString() == userId)
-					.Select(h => new HouseAllViewModel
-					{
-						Id = h.Id.ToString(),
-						Title = h.Title,
-						Address = h.Address,
-						ImageUrl = h.ImageUrl,
-						PricePerMonth = h.PricePerMonth,
-						IsRented = h.RenterId.HasValue
-					})
-					.ToArrayAsync();
-			}
-
-			return myHouses;
-        }
-
 		public async Task<HouseDetailViewModel> GetHouseDetailAsync(string houseId)
 		{
 			HouseDetailViewModel house = await this.dbContext.Houses
