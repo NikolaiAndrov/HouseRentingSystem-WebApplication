@@ -37,5 +37,9 @@
 		Task<bool> IsHouseRentedByCurrentUserAsync(string houseId, string userId);
 
 		Task<StatisticsServiceModel> GetStatisticsAsync();
+
+		Task<ICollection<HouseAllViewModel>> GetAllHousesByUserIdAsync(string userId);
+
+		Task<ICollection<HouseAllViewModel>> GetAllHousesByAgentIdAsync(Guid agentId);
 	}
 }

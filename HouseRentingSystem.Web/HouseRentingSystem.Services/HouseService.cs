@@ -134,6 +134,24 @@
 			await this.dbContext.SaveChangesAsync();
 		}
 
+		public async Task<ICollection<HouseAllViewModel>> GetAllHousesByAgentIdAsync(Guid agentId)
+		{
+			ICollection<HouseAllViewModel> addedHouses = await this.dbContext.Houses
+				.Where(h => h.IsActive && h.AgentId == agentId)
+				.Select(h => new HouseAllViewModel
+				{
+					Id = h.Id.ToString(),
+					Title = h.Title,
+					Address = h.Address,
+					ImageUrl = h.ImageUrl,
+					PricePerMonth = h.PricePerMonth,
+					IsRented = h.RenterId.HasValue
+				})
+				.ToArrayAsync();
+
+			return addedHouses;
+		}
+
 		public async Task<ICollection<HouseAllViewModel>> GetAllHousesByUserOrAgentIdAsync(string userId, bool isAdimn)
 		{
 			ICollection<HouseAllViewModel> myHouses;
@@ -253,6 +271,24 @@
 				.FirstAsync();
 			
 			return houseFormModel;
+		}
+
+		public async Task<ICollection<HouseAllViewModel>> GetAllHousesByUserIdAsync(string userId)
+		{
+			ICollection<HouseAllViewModel> rentedHouses = await this.dbContext.Houses
+				.Where(h => h.IsActive && h.RenterId.HasValue && h.RenterId.ToString() == userId)
+				.Select(h => new HouseAllViewModel
+				{
+					Id = h.Id.ToString(),
+					Title = h.Title,
+					Address = h.Address,
+					ImageUrl = h.ImageUrl,
+					PricePerMonth = h.PricePerMonth,
+					IsRented = h.RenterId.HasValue
+				})
+				.ToArrayAsync();
+
+			return rentedHouses;
 		}
 
 		public async Task<StatisticsServiceModel> GetStatisticsAsync()

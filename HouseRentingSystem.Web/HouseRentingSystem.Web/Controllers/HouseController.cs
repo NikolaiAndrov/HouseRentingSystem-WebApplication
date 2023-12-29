@@ -8,6 +8,7 @@
     using Microsoft.AspNetCore.Mvc;
     using System.Security.Claims;
     using static Common.NotificationConstantMessages;
+    using static Common.GeneralConstants;
 
     [Authorize]
 	public class HouseController : Controller
@@ -137,6 +138,11 @@
 		[HttpGet]
 		public async Task<IActionResult> Mine()
 		{
+			if (this.User.IsAdmin())
+			{
+				return RedirectToAction("Mine", "House", new { Area = AdminAreaName });
+			}
+
 			ICollection<HouseAllViewModel> myHouses;
 
 			try
