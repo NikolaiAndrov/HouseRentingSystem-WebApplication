@@ -57,6 +57,7 @@ namespace HouseRentingSystem.Web
 			builder.Services.AddScoped<IAgentService, AgentService>();
 			builder.Services.AddScoped<ICategoryService, CategoryService>();
 			builder.Services.AddScoped<IUserService, UserService>();
+			builder.Services.AddScoped<IRentService, RentService>();
 
 			builder.Services.ConfigureApplicationCookie(cfg =>
 			{
