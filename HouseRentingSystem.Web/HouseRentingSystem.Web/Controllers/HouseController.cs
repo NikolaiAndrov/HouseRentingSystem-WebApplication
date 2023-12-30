@@ -7,8 +7,10 @@
     using Microsoft.AspNetCore.Authorization;
     using Microsoft.AspNetCore.Mvc;
     using System.Security.Claims;
+    using Microsoft.Extensions.Caching.Memory;
     using static Common.NotificationConstantMessages;
     using static Common.GeneralConstants;
+	
 
     [Authorize]
 	public class HouseController : Controller
@@ -16,12 +18,14 @@
 		private readonly IHouseService houseService;
 		private readonly IAgentService agentService;
 		private readonly ICategoryService categoryService;
+		private readonly IMemoryCache memoryCache;
 
-		public HouseController(IHouseService houseService, IAgentService agentService, ICategoryService categoryService)
+		public HouseController(IHouseService houseService, IAgentService agentService, ICategoryService categoryService, IMemoryCache memoryCache)
 		{
 			this.houseService = houseService;
 			this.agentService = agentService;
 			this.categoryService = categoryService;
+			this.memoryCache = memoryCache;
 		}
 
 
@@ -436,6 +440,9 @@
 			}
 
 			TempData[SuccessMessage] = "House rented successfully!";
+
+			this.memoryCache.Remove(RentsCacheKey);
+
 			return RedirectToAction("Mine", "House");
 		}
 
@@ -497,6 +504,9 @@
 			}
 
 			TempData[SuccessMessage] = "You left the house successfully!";
+
+			this.memoryCache.Remove(RentsCacheKey);
+
 			return RedirectToAction("Mine", "House");
 		}
 

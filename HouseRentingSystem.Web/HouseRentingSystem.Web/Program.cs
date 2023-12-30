@@ -60,6 +60,7 @@ namespace HouseRentingSystem.Web
 			builder.Services.AddScoped<IRentService, RentService>();
 
 			builder.Services.AddMemoryCache();
+			builder.Services.AddResponseCaching();
 
 			builder.Services.ConfigureApplicationCookie(cfg =>
 			{
