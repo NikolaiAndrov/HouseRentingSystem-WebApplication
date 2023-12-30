@@ -1,12 +1,3 @@
-﻿@using static HouseRentingSystem.Common.GeneralConstants;
-
-@{
-    if (this.User.IsInRole(AdminRoleName))
-    {
-        Layout = "~/Areas/Admin/Views/Shared/_AdminLayout.cshtml";
-    }
-    else
-    {
-        Layout = "_Layout";
-    }
+﻿@{
+    Layout = "_AdminLayout";
 }
