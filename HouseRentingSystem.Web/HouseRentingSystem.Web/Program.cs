@@ -59,6 +59,8 @@ namespace HouseRentingSystem.Web
 			builder.Services.AddScoped<IUserService, UserService>();
 			builder.Services.AddScoped<IRentService, RentService>();
 
+			builder.Services.AddMemoryCache();
+
 			builder.Services.ConfigureApplicationCookie(cfg =>
 			{
 				cfg.LoginPath = "/User/Login";
