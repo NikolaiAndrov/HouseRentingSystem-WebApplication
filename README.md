@@ -39,6 +39,6 @@ To run this application locally, follow these steps:
 
 ##Screenshots:
 
-<img width="1280" alt="Screenshot3" src="https://github.com/NikolaiAndrov/HouseRentingSystem-WebApplication/assets/32267207/75012d4a-5443-40d8-8020-45ce5df32785">
-<img width="1280" alt="Screenshot1" src="https://github.com/NikolaiAndrov/HouseRentingSystem-WebApplication/assets/32267207/171a8029-96f4-47f5-94cf-7a1ecec4f623">
-<img width="1280" alt="Screenshot2" src="https://github.com/NikolaiAndrov/HouseRentingSystem-WebApplication/assets/32267207/0a705d41-b1a7-41a7-8168-25691090835b">
+# <img width="1280" alt="Screenshot3" src="https://github.com/NikolaiAndrov/HouseRentingSystem-WebApplication/assets/32267207/75012d4a-5443-40d8-8020-45ce5df32785">
+# <img width="1280" alt="Screenshot1" src="https://github.com/NikolaiAndrov/HouseRentingSystem-WebApplication/assets/32267207/171a8029-96f4-47f5-94cf-7a1ecec4f623">
+# <img width="1280" alt="Screenshot2" src="https://github.com/NikolaiAndrov/HouseRentingSystem-WebApplication/assets/32267207/0a705d41-b1a7-41a7-8168-25691090835b">
