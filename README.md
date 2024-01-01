@@ -38,8 +38,5 @@ To run this application locally, follow these steps:
 4. Run the application
 
 ##Screenshots:
-- https://www.dropbox.com/scl/fi/be8qpdp9086dbmwoan2u3/Screenshot-2024-01-01-194417.png?rlkey=erfv1bhrfgvhwf7y2afne2di0&dl=0
-  
-- https://www.dropbox.com/scl/fi/l5idy3wd4sl823lli12s0/Screenshot-2024-01-01-202420.png?rlkey=k4k3b1avd9l7nwovobxrut2hn&dl=0
-  
-- https://www.dropbox.com/scl/fi/7ts3tqrkq4fruhdgsoht6/Screenshot-2024-01-01-202833.png?rlkey=ya4zyu79axwdmei9k2d7ff1xl&dl=0
+
+<img width="1280" alt="Screenshot1" src="https://github.com/NikolaiAndrov/HouseRentingSystem-WebApplication/assets/32267207/171a8029-96f4-47f5-94cf-7a1ecec4f623">
