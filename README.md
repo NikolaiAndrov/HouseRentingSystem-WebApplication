@@ -36,3 +36,6 @@ To run this application locally, follow these steps:
 2. Provide the connection string to the database.
 3. Set multiple startup projects: HouseRentingSystem.Web, HouseRentingSystem.WebApi
 4. Run the application
+
+##Screenshot:
+- https://www.dropbox.com/scl/fi/be8qpdp9086dbmwoan2u3/Screenshot-2024-01-01-194417.png?rlkey=erfv1bhrfgvhwf7y2afne2di0&dl=0
