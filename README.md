@@ -38,4 +38,4 @@ To run this application locally, follow these steps:
 4. Run the application
 
 ##Screenshot:
-- https://www.dropbox.com/scl/fi/be8qpdp9086dbmwoan2u3/Screenshot-2024-01-01-194417.png?rlkey=erfv1bhrfgvhwf7y2afne2di0&dl=0
+- https://ucaf267b96056f268201fe133080.previews.dropboxusercontent.com/p/thumb/ACITyRheBzWxonHyTUFh8GdLYEanRinoDPhNJ6z75o5nKLbOwaCVU4KfyfJ-1J8pAbBIHPpH8gJwS-a6S-G4OGA-BJny1bFxLeGsSkNHf83cjWOSio4xdX-PwQSnz8p2iwbQct6bG_xdpVBJ_iBTVPIdheVrXp787C0vmJJb6zPjr6KWjbEPiGK5FwDLtJijfxFiu0iZq_bNXY9TskJImA6_npDFM4PWty3sr8_IzCr87Tgx9HjzED2_aVg4zm3-3t5oDxdy2KgPP5ePmgkhoO-5gG6KsCgmWqsaEayMzuAfPhj9jb3bp3a_zzBNRB8fi1_FPUXsIA9qY7nUNKZaEMfeWxDUpZrYIjo1KOePYdSgd0Rk75vUdNghnJ3Wg2_Khas/p.png
