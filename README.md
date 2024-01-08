@@ -40,5 +40,5 @@ To run this application locally, follow these steps:
 ##Screenshots:
 
 # <img width="1280" alt="Screenshot 2024-01-08 140128" src="https://github.com/NikolaiAndrov/HouseRentingSystem-WebApplication/assets/32267207/5bb85e93-4519-4263-a416-84cbc16a1505">
-# <img width="1280" alt="Screenshot1" src="https://github.com/NikolaiAndrov/HouseRentingSystem-WebApplication/assets/32267207/171a8029-96f4-47f5-94cf-7a1ecec4f623">
+# <img width="1280" alt="Screenshot 2024-01-08 140548" src="https://github.com/NikolaiAndrov/HouseRentingSystem-WebApplication/assets/32267207/8cd364ec-f93c-44cc-a3c9-843425bfdc3a">
 # <img width="1280" alt="Screenshot2" src="https://github.com/NikolaiAndrov/HouseRentingSystem-WebApplication/assets/32267207/0a705d41-b1a7-41a7-8168-25691090835b">
